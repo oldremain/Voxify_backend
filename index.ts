@@ -3,7 +3,6 @@ import cors from "cors";
 import axios from "axios";
 
 const app = express();
-app.use(express.json());
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -22,11 +21,12 @@ app.use(
         callback(new Error("Доступ запрещён политикой CORS"));
       }
     },
-    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type"],
   })
 );
+
+app.use(express.json());
 
 const GAS_URL =
   "https://script.google.com/macros/s/AKfycbwCluZ9VfnsrMs0sswC0HyNxPnhzlEirOAiJyEYKD174gXV0PTjGK06rKiHq10RlcWjfQ/exec";
