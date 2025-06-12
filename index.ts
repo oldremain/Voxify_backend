@@ -3,8 +3,30 @@ import cors from "cors";
 import axios from "axios";
 
 const app = express();
-app.use(cors());
 app.use(express.json());
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://voxify-zeta.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Разрешаем запросы без origin (например, от Postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Доступ запрещён политикой CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 const GAS_URL =
   "https://script.google.com/macros/s/AKfycbwCluZ9VfnsrMs0sswC0HyNxPnhzlEirOAiJyEYKD174gXV0PTjGK06rKiHq10RlcWjfQ/exec";
